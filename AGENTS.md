@@ -5,6 +5,59 @@ Guidance for anyone (human or AI agent) submitting a pull request. This is the h
 rules, add-a-metric/screen/command recipes), [`docs/BUILD.md`](docs/BUILD.md) covers signing/pairing,
 and [`docs/IOS.md`](docs/IOS.md) covers the iOS target. Read this first; follow the links for depth.
 
+## Personal fork: economical agent workflow
+
+This workflow applies to HCESARIN/zhoop. Preserve the engineering requirements below.
+The owner authorizes delegation for this repository using the following model preferences.
+
+### Model routing
+
+- **Astra / medium** (`gpt-6-astra`, `medium`): clarify difficult requirements, propose ideas
+  and improvements, choose architecture, turn requests into clear implementation steps,
+  resolve difficult bugs, and review integrated changes.
+- **GPT-6 Luna / max** (`gpt-6-luna`, `max`): implement well-defined changes, inspect bounded
+  areas of code, update documentation, and run focused checks. Use these explicit settings
+  when launching a worker; do not silently substitute another model or reasoning level.
+- These are workflow preferences, not an automatic switch of the active chat's model.
+  Use supported model controls when available; otherwise state the limitation and have the
+  owner select Astra / medium in the chat. Never claim the setting changed without evidence.
+
+### Small work loop
+
+1. Read only the relevant instructions and files. Define the desired outcome and acceptance
+   criteria in a few sentences; skip a formal plan for a trivial change.
+2. Handle tiny edits directly when delegation would cost more than doing the work. For
+   substantial bounded implementation, delegate to one Luna worker by default. Add workers
+   only for independent tasks with distinct file ownership, within the runtime's capacity.
+3. Give each worker the goal, repository path, relevant files and constraints, acceptance
+   criteria, and necessary checks. Prefer a fresh, concise handoff over copying the whole
+   conversation. With the collaboration tools, use `fork_turns="none"`,
+   `model="gpt-6-luna"`, and `reasoning_effort="max"`; tell the worker to read this file.
+   Use subagents for subtasks; create separate sidebar chats only when explicitly requested.
+4. Workers return changed files, a short result, verification evidence, and remaining issues.
+   They do not recursively delegate. Escalate ambiguity, repeated failures, or architectural
+   decisions to Astra with evidence instead of retrying the same approach indefinitely.
+5. Astra reviews the resulting diff, resolves integration issues, and ensures the relevant
+   checks pass. Avoid duplicating a worker's completed investigation or rerunning unchanged
+   successful checks without a reason. Report the result and any actual limitations briefly.
+
+### Keep usage and learning bounded
+
+- Reuse useful workers, batch independent reads, avoid duplicate searches and frequent polls,
+  and stop when the acceptance criteria are met. Luna at max still consumes usage; delegation
+  is not free and no fixed saving is promised.
+- At completion, update the learned preferences below only when an explicit owner correction
+  or a verified, reusable project lesson warrants it. Record the evidence/date and a concise
+  actionable rule; edit or replace stale entries rather than append a session transcript.
+- Keep at most eight learned entries. Never store credentials, device codes, private health
+  data, guesses about the owner, or temporary task status. Mention substantive learning updates
+  in the completion message. Future user instructions take precedence over saved preferences.
+
+### Learned preferences
+
+- 2026-09-29 — Owner request: conserve usage; prefer Astra / medium for hard reasoning,
+  ideas and implementation planning, and GPT-6 Luna / max for delegated implementation.
+
 ## What NOOP is (and the hard scope limits)
 
 NOOP is an **offline-by-default, on-device** companion app for WHOOP 4.0 and 5.0/MG straps (with
